@@ -32,11 +32,11 @@ apk add --no-cache curl \
 # make old
 && cd /usr/local/src/postgresql-${POSTGRESQL_OLD} \
 && ./configure --prefix=/usr/local/postgresql/${POSTGRESQL_OLD} --with-llvm --with-icu --with-tcl --with-perl --with-python --with-gssapi --with-pam --with-ldap --with-openssl --with-libedit-preferred --with-uuid=e2fs --with-libxml --with-libxslt --with-system-tzdata=/usr/share/zoneinfo --with-gnu-ld \
-&& make -j install \
+&& make install \
 # make new
 && cd /usr/local/src/postgresql-${POSTGRESQL_OLD} \
 && ./configure --prefix=/usr/local/postgresql/${POSTGRESQL_NEW} --with-llvm --with-icu --with-tcl --with-perl --with-python --with-gssapi --with-pam --with-ldap --with-openssl --with-libedit-preferred --with-uuid=e2fs --with-libxml --with-libxslt --with-system-tzdata=/usr/share/zoneinfo --with-gnu-ld \
-&& make -j install \
+&& make install \
 # make source
 && rm -rf /usr/local/src/${POSTGRESQL_OLD} /usr/local/src/${POSTGRESQL_NEW}
 
