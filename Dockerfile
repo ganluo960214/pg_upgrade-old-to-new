@@ -28,7 +28,7 @@ RUN \
 # apk add compile dep
 apk add --no-cache --virtual .build-deps g++ llvm10-dev clang icu-dev perl-dev python3-dev readline-dev zlib-dev krb5-dev openssl-dev linux-pam-dev libxml2-dev libxslt-dev openldap-dev tcl-dev make linux-headers tzdata execline curl \
 # download old and new versoin
-&& curl -LO https://ftp.postgresql.org/pub/source/v${POSTGRESQL_OLD}/postgresql-${POSTGRESQL_OLD}.tar.gz https://ftp.postgresql.org/pub/source/v${POSTGRESQL_NEW}/postgresql-${POSTGRESQL_NEW}.tar.gz \
+&& curl -LO https://ftp.postgresql.org/pub/source/v${POSTGRESQL_OLD}/postgresql-${POSTGRESQL_OLD}.tar.gz -LO https://ftp.postgresql.org/pub/source/v${POSTGRESQL_NEW}/postgresql-${POSTGRESQL_NEW}.tar.gz \
 # tar
 && tar -xf postgresql-${POSTGRESQL_OLD}.tar.gz && tar -xf postgresql-${POSTGRESQL_NEW}.tar.gz \
 # make old
