@@ -46,7 +46,7 @@ apk add --no-cache curl \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-&& apk add --no-cache --virtual .postgresql-rundeps $runDeps bash su-exec tzdata \
+&& apk add --no-cache --virtual .postgresql-rundeps $runDeps bash su-exec musl-locales tzdata \
 && apk del --no-network .build-deps;
 
 WORKDIR /var/lib/postgresql
