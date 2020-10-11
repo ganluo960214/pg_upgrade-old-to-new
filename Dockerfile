@@ -41,11 +41,11 @@ apk add --no-cache curl \
 && rm -rf /usr/local/src/${POSTGRESQL_OLD} /usr/local/src/${POSTGRESQL_NEW} \
 # apk add run dep
 && runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)" \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+        | tr ',' '\n' \
+        | sort -u \
+        | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+)" \
 && apk add --no-cache --virtual .postgresql-rundeps $runDeps bash su-exec musl-locales tzdata \
 && apk del --no-network .build-deps;
 
