@@ -45,7 +45,7 @@ apk add --no-cache curl \
 			| tr ',' '\n' \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
+	)" \
 && apk add --no-cache --virtual .postgresql-rundeps bash su-exec tzdata \
 && apk del --no-network .build-deps;
 
