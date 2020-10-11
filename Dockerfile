@@ -38,7 +38,15 @@ apk add --no-cache curl \
 && ./configure --prefix=/usr/local/postgresql/${POSTGRESQL_NEW} --with-llvm --with-icu --with-tcl --with-perl --with-python --with-gssapi --with-pam --with-ldap --with-openssl --with-libedit-preferred --with-uuid=e2fs --with-libxml --with-libxslt --with-system-tzdata=/usr/share/zoneinfo --with-gnu-ld \
 && make install \
 # make source
-&& rm -rf /usr/local/src/${POSTGRESQL_OLD} /usr/local/src/${POSTGRESQL_NEW}
-
+&& rm -rf /usr/local/src/${POSTGRESQL_OLD} /usr/local/src/${POSTGRESQL_NEW} \
+# apk add run dep
+&& runDeps="$( \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	)"; \
+&& apk add --no-cache --virtual .postgresql-rundeps bash su-exec tzdata \
+&& apk del --no-network .build-deps;
 
 WORKDIR /var/lib/postgresql
