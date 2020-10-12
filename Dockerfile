@@ -15,6 +15,9 @@ ENV PGHOME /var/lib/postgresql
 ENV PGDATAOLD ${PGHOME}/old_data
 ENV PGDATANEW ${PGHOME}/new_data
 
+VOLUME [ ${PGDATAOLD} ]
+VOLUME [ ${PGDATANEW} ]
+
 # 70 is the standard uid/gid for "postgres" in Alpine
 RUN \
 addgroup -g 70 -S postgres; \
@@ -51,5 +54,8 @@ apk add --no-cache --virtual .build-deps g++ llvm10-dev clang icu-dev perl-dev p
 )" \
 && apk add --no-cache --virtual .postgresql-rundeps $runDeps bash su-exec musl-locales tzdata \
 && apk del --no-network .build-deps;
+
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 WORKDIR /var/lib/postgresql
