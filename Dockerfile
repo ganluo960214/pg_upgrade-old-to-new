@@ -29,15 +29,15 @@ WORKDIR /usr/local/src
 
 RUN \
 # apk add compile dep
-apk add --no-cache --virtual .build-deps g++ llvm10-dev clang icu-dev perl-dev python3-dev readline-dev zlib-dev krb5-dev openssl-dev linux-pam-dev libxml2-dev libxslt-dev openldap-dev tcl-dev make linux-headers tzdata execline curl \
+apk add --no-cache --virtual .build-deps g++ llvm10-dev clang icu-dev perl-dev python3-dev readline-dev zlib-dev krb5-dev openssl-dev linux-pam-dev libxml2-dev libxslt-dev openldap-dev tcl-dev make linux-headers tzdata execline curl libxml2-utils \
 # download old and new versoin
 && curl -LO https://ftp.postgresql.org/pub/source/v${POSTGRESQL_OLD}/postgresql-${POSTGRESQL_OLD}.tar.gz -LO https://ftp.postgresql.org/pub/source/v${POSTGRESQL_NEW}/postgresql-${POSTGRESQL_NEW}.tar.gz \
 # tar
 && tar -xf postgresql-${POSTGRESQL_OLD}.tar.gz && tar -xf postgresql-${POSTGRESQL_NEW}.tar.gz \
 # make old
 && cd /usr/local/src/postgresql-${POSTGRESQL_OLD} \
-&& ./configure --prefix=${POSTGRESQL_OLD_HOME}} --with-llvm --with-icu --with-tcl --with-perl --with-python --with-gssapi --with-pam --with-ldap --with-openssl --with-libedit-preferred --with-uuid=e2fs --with-libxml --with-libxslt --with-system-tzdata=/usr/share/zoneinfo --with-gnu-ld \
-&& make install \
+&& ./configure --prefix=${POSTGRESQL_OLD_HOME} --with-llvm --with-icu --with-tcl --with-perl --with-python --with-gssapi --with-pam --with-ldap --with-openssl --with-libedit-preferred --with-uuid=e2fs --with-libxml --with-libxslt --with-system-tzdata=/usr/share/zoneinfo --with-gnu-ld \
+&& make world install \
 # make new
 && cd /usr/local/src/postgresql-${POSTGRESQL_NEW} \
 && ./configure --prefix=${POSTGRESQL_NEW_HOME} --with-llvm --with-icu --with-tcl --with-perl --with-python --with-gssapi --with-pam --with-ldap --with-openssl --with-libedit-preferred --with-uuid=e2fs --with-libxml --with-libxslt --with-system-tzdata=/usr/share/zoneinfo --with-gnu-ld \
@@ -52,7 +52,7 @@ apk add --no-cache --virtual .build-deps g++ llvm10-dev clang icu-dev perl-dev p
         | sort -u \
         | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 )" \
-&& apk add --no-cache --virtual .postgresql-rundeps $runDeps bash su-exec musl-locales tzdata \
+&& apk add --no-cache --virtual .postgresql-rundeps $runDeps bash su-exec musl-locales tzdata libxml2-utils \
 && apk del --no-network .build-deps;
 
 COPY docker-entrypoint.sh /usr/local/bin/
